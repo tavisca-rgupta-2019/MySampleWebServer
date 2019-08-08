@@ -6,29 +6,19 @@ namespace MySampleWebServer
 {
     class ErrorHandler
     {
-        public static Response MakeNullRequest()
+        private static Dictionary<int, IError> ErrorMessages = new Dictionary<int, IError>
+    {
+        {400,new MakeNullRequest() },
+        {405,new MakeMethodNotAllowed() },
+        {404,new MakePageNotFound() }
+    };
+        public static httpResponse GetErrorResponseMessage(int statusCode)
         {
-            String file = Environment.CurrentDirectory + HTTPServer.MSG_DIR + "400.html";
-            Byte[] data = FileHandler.ConvertingFileToByteArray(file);
-            return new Response("400 Bad Request", "text/html", data);
+            IError errorMessage= ErrorMessages[statusCode];
+            return errorMessage.GetResponse();
         }
-
-        public static Response MakeMethodNotAllowed()
-        {
-            String file = Environment.CurrentDirectory + HTTPServer.MSG_DIR + "405.html";
-            Byte[] data = FileHandler.ConvertingFileToByteArray(file);
-            return new Response("405 Method Not Allowed", "text/html", data);
-
-
-        }
-        public  static Response MakePageNotFound()
-        {
-
-            String file = Environment.CurrentDirectory + HTTPServer.MSG_DIR + "404.html";
-            Byte[] data = FileHandler.ConvertingFileToByteArray(file);
-            return new Response("404 Page Not Found", "text/html", data);
-        }
-
+      
+        
 
     }
 }

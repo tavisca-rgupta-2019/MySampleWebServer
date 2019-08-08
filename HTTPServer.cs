@@ -12,29 +12,29 @@ namespace MySampleWebServer
         public const string MSG_DIR = "/root/msg/";
         public const string WEB_DIR = "/root/web/";
         public const string VERSION = "HTTP/1.1";
-        public const string NAME = "Rohit's Personal HTTP WebServer v0.1";
+        public const string NAME = "HTTP WebServer v0.1";
         private bool running = false;
-        private TcpListener listener;
+        private TcpListener server;
 
         public HTTPServer(int port)
         {
-            listener = new TcpListener(IPAddress.Any, port);
+            server = new TcpListener(IPAddress.Any, port);
         }
 
         public void Start()
-        {
-            listener.Start();
+        {   server.Start();
+            Console.WriteLine("Waiting for connection....");
             while (true)
-            {
-                Console.WriteLine("Waiting for connection....");
-                TcpClient client = listener.AcceptTcpClient();
-
-                Thread serverThread = new Thread(new ThreadStart(() => Run(client)));
-                serverThread.Start();
+            {   TcpClient client = server.AcceptTcpClient();
+                Thread clientThread = new Thread(new ThreadStart(() => new Httplistener(client)));
+                clientThread.Start();
             }
         }
+            
 
-        private void Run(TcpClient client)
+       
+
+        /*private void Run(TcpClient client)
         {
             //running = true;
             //listener.Start();
@@ -46,7 +46,7 @@ namespace MySampleWebServer
                 client.Close();
             
            
-        }
+        }*/
 
        
 
